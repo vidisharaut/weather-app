@@ -6,11 +6,44 @@ const api = {
 };
 
 function App() {
+  const dateBuilder = (d) => {
+    let months = [
+      "Jan",
+      "Feb",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "Aug",
+      "Sept",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    let days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+
+    let day = days[d.getDay()];
+    let date = d.getDate();
+    let month = months[d.getMonth()];
+    let year = d.getFullYear();
+
+    return `${day} ${date} ${month} ${year}`;
+  };
+
   return (
     <div className="App">
       <main>
         <div className="search-box">
           <input type="text" className="search-bar" placeholder="Search..." />
+        </div>
+        <div className="location-box">
+          <div className="location">Mumbai, India</div>
+          <div className="date">{dateBuilder(new Date())}</div>
+        </div>
+        <div className="weather-box">
+          <div className="temp">15ºC</div>
+          <div className="weather">Cold</div>
         </div>
       </main>
     </div>
