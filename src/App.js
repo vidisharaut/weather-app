@@ -1,11 +1,28 @@
+import { useState } from "react";
 import "./App.css";
 
 const api = {
-  key: "04ba21e02c8750e703c5b352bde4e3b9",
-  base: "https://api.openweather.org/data/2.5/",
+  key: "3a67ff9c21dfbfc49902129cbd455db0",
+  base: "api.openweathermap.org/data/2.5/",
 };
 
 function App() {
+  const [query, setQuery] = useState("");
+  const [weather, setWeather] = useState({});
+
+  const search = (evt) => {
+    if (evt.key === "Enter") {
+      const currentWeather = fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${api.key}`
+      )
+        .then((res) => res.json())
+        .then((json) => setWeather(json));
+      setQuery("");
+      console.log(weather);
+      console.log(currentWeather);
+    }
+  };
+
   const dateBuilder = (d) => {
     let months = [
       "Jan",
@@ -32,19 +49,42 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div
+      className={
+        typeof weather.main != "undefined"
+          ? weather.main.temp > 16
+            ? "App warm"
+            : "App"
+          : "App"
+      }
+    >
       <main>
         <div className="search-box">
-          <input type="text" className="search-bar" placeholder="Search..." />
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search..."
+            onChange={(e) => setQuery(e.target.value)}
+            value={query}
+            onKeyPress={search}
+          />
         </div>
-        <div className="location-box">
-          <div className="location">Mumbai, India</div>
-          <div className="date">{dateBuilder(new Date())}</div>
-        </div>
-        <div className="weather-box">
-          <div className="temp">15ºC</div>
-          <div className="weather">Cold</div>
-        </div>
+        {typeof weather.main != "undefined" ? (
+          <div>
+            <div className="location-box">
+              <div className="location">
+                {weather.name}, {weather.sys.country}
+              </div>
+              <div className="date">{dateBuilder(new Date())}</div>
+            </div>
+            <div className="weather-box">
+              <div className="temp">{Math.round(weather.main.temp)}ºC</div>
+              <div className="weather">{weather.weather[0].main}</div>
+            </div>
+          </div>
+        ) : (
+          `There's no such city try searching Mumbai...`
+        )}
       </main>
     </div>
   );
