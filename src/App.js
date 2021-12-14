@@ -9,6 +9,10 @@ const api = {
 function App() {
   const [query, setQuery] = useState("");
   const [weather, setWeather] = useState({});
+  const [city, setCity] = useState("Mumbai");
+  const [country, setCountry] = useState("IN");
+  const [temp, setTemp] = useState("Smoke");
+  const [climate, setClimate] = useState("smoke");
 
   const search = (evt) => {
     if (evt.key === "Enter") {
@@ -19,7 +23,7 @@ function App() {
         .then((json) => setWeather(json));
       setQuery("");
       console.log(weather);
-      console.log(currentWeather);
+      console.log(weather.name);
     }
   };
 
@@ -83,7 +87,7 @@ function App() {
             </div>
           </div>
         ) : (
-          `There's no such city try searching Mumbai...`
+          <h2 className="suggestion">Try searching Mumbai...</h2>
         )}
       </main>
     </div>
